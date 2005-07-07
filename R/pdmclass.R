@@ -179,7 +179,7 @@
 		if(!cmplx) double(n) else complex(n),
 		as.integer(job),
 		info = integer(1),
-                PACdimensionAGE = "base")[c("d", "u", "v", "info")]
+                PACKAGE = "base")[c("d", "u", "v", "info")]
   if(z$info)
     stop(paste("Numerical error (code", z$info, ") in algorithm"))
   if(cmplx) {
@@ -200,14 +200,14 @@
   }
 }
 
-predict.pls <- function(object, x) {
+predict.pls <- function(object, x, ...) {
 
     if (missing(x)) 
         fitted(object)
     else scale(x, object$xmeans, FALSE) %*% object$coef
 }
 
-predict.svd <- function(object, x) {
+predict.svd <- function(object, x, ...) {
 
     if (missing(x)) 
         fitted(object)
@@ -217,11 +217,10 @@ predict.svd <- function(object, x) {
 
 pdmClass <- function (formula = formula(data), method = c("pls", "pcr", "ridge"),
                       data = sys.frame(sys.parent()), weights, theta,
-                      dimension = J - 1, eps = .Machine$double.eps,
-                      keep.fitted = (n * dimension < 1000), ...){
+                      dimension = J - 1, eps = .Machine$double.eps, ...){
   
   this.call <- match.call()
-  m <- match.call(expand = F)
+  m <- match.call(expand = FALSE)
   m[[1]] <- as.name("model.frame")
   m <- m[match(names(m), c("", "formula", "data", "weights"), 
                0)]
@@ -278,7 +277,7 @@ pdmClass <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
     return(structure(list(dimension = 0, fit = fit, call = this.call), 
                      class = "fda"))
   }
-  thetan <- thetan[, seq(dimension), drop = F]
+  thetan <- thetan[, seq(dimension), drop = FALSE]
   pe <- pe[seq(dimension)]
   alpha <- sqrt(lambda[seq(dimension)])
   sqima <- sqrt(1 - lambda[seq(dimension)])
@@ -299,12 +298,11 @@ pdmClass <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
 pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge"),
                       data = sys.frame(sys.parent()), weights, theta,
                       dimension = J - 1, eps = .Machine$double.eps,
-                      keep.fitted = (n * dimension < 1000),
                       genelist = NULL, list.length = NULL,
                       B = 100, ...){
   
   this.call <- match.call()
-  m <- match.call(expand = F)
+  m <- match.call(expand = FALSE)
   m[[1]] <- as.name("model.frame")
   m <- m[match(names(m), c("", "formula", "data", "weights"), 
                0)]

@@ -8,14 +8,15 @@
 }
 \usage{
 
-\method{predict}{pls}(object, x)
-\method{predict}{svd}(object, x)
+\method{predict}{pls}(object, x, ...)
+\method{predict}{svd}(object, x, ...)
 }
 \arguments{
   \item{object}{ An object created by a call to \code{pdmClass}. }
   \item{x}{ A matrix of new observations in which rows are samples and
     columns are genes. If not supplied, prediction will be performed on
     the original training set.}
+  \item{...}{Other variables passed to predict.}
 }
 
 \value{
@@ -31,6 +32,7 @@ x <- t(exprs(fibroEset))
 genes <- geneNames(fibroEset)
 tmp <- pdmClass(y ~ x)
 predict(tmp)
+}
 \keyword{ models}
 \keyword{ robust }
 \keyword{ classif}

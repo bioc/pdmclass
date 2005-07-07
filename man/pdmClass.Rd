@@ -40,7 +40,7 @@ eps = .Machine$double.eps, ...)
   that unlike most microarray analyses, in this instance the columns of
   X are genes and rows are samples, so most calls will require something
   similar to Y ~ t(X).
-  
+  }
 \value{
   an object of class \code{"fda"}.  Use \code{predict} to extract
   discriminant variables, posterior probabilities or predicted class
