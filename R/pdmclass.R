@@ -354,12 +354,18 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   gps <- vector("list", length(unique(fg)))
   newx <- matrix(NA, nc = dim(x)[2], nr = dim(x)[1])
   counts  <- vector("list", dim(theta)[2])
-  for(k in seq(along = counts)) counts[[k]] <- matrix(NA, nc = B, nr = list.length)
+  for(k in seq(along = counts)){
+    counts[[k]] <- matrix(NA, nc = B, nr = list.length)
+    row.names(counts[[k]]) <- genes[[k]]
+  }
+  nam <- paste(levels(y)[as.numeric(dimnames(contr.treatment(J))[[2]])], "vs",
+               levels(y)[1])
+  names(counts) <- nam
   for(i in unique(fg)) gps[[i]] <- which(fg == unique(fg)[i])
   for(i in 1:B){
     for(j in seq(along = gps)){
       samp <- sample(gps[[j]], length(gps[[j]]), TRUE)
-      newx[gps[[j]],] <- apply(x[samp,], 1, jitter)
+      newx[gps[[j]],] <- t(apply(x[samp,], 1, jitter))
     }
     fit.tmp <-  switch(method,
                        pls = svdpls1c(scale(newx, center = TRUE, scale = FALSE),
@@ -371,5 +377,18 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
       counts[[k]][,i] <- genes[[k]] %in% genelist[ord][1:list.length]
     }
   }
-  out <- list(genes = genes, counts = sapply(counts, function(x) rowSums(x)/B))
+  counts <- lapply(counts, function(x) rowSums(x)/B)
+  counts <- lapply(counts, as.data.frame)
+  counts
 }
+
+pdmClass.cv <- function(Y, X, method = c("pls", "pcr", "ridge")){
+  out <- vector()
+  out <- factor(out, levels = levels(Y))
+  for(i in seq(along = Y)){
+    tmp <- pdmClass(Y[-i] ~ X[-i,], method = method)
+    out[i] <- predict(tmp, X[i, , drop = FALSE])
+  }
+  out
+}
+    

@@ -1,7 +1,7 @@
 Package: pdmclass
 Type: Package
 Title: Classification of Microarray Samples using Penalized Discriminant Methods
-Version: 0.1
+Version: 1.0.0
 Date: 2005-07-06
 Author: James W. MacDonald, Debashis Ghosh, based in part on 
 	pls code of Mike Denham and fda code of Trevor Hastie and Robert Tibshirani
@@ -9,6 +9,6 @@ Maintainer: James W. MacDonald <jmacdon@med.umich.edu>
 Description: This package can be used to classify microarray data using one of three
 	penalized regression methods; partial least squares, principal components
 	regression, or ridge regression.
-License: LGPL version 2 or newer
+License: LLGPL version 2 or newer
 Depends: Biobase (>= 1.4.22), R (>= 1.9.0), fibroEset, mda
-
+biocViews: Classification

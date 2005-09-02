@@ -81,9 +81,8 @@ eps = .Machine$double.eps, ...)
 \examples{
 library(fibroEset)
 data(fibroEset)
-y <- as.numeric(pData(fibroEset)[,2])
+y <- as.factor(pData(fibroEset)[,2])
 x <- t(exprs(fibroEset))
-genes <- geneNames(fibroEset)
 pdmClass(y ~ x)
 }
 \keyword{ models}

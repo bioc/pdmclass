@@ -1,0 +1,164 @@
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+% \VignetteIndexEntry{pdmclass Overview}
+% \VignetteDepends{pdmclass, Biobase, fibroEset}
+% \VignetteKeywords{Expression Analysis, Postprocessing}
+% \VignettePackage{pdmclass}
+
+\documentclass[11pt]{article}
+\usepackage{hyperref}
+\parindent 0.5in
+
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rfunarg}[1]{\textit{#1}}
+
+
+
+\begin{document}
+
+\title{\bf Using pdmclass}
+
+\author{James W. MacDonald}
+
+\maketitle
+
+\section{Overview}
+
+Classification is a statistical technique that uses measurements on a defined set 
+of samples (a training set) to build a rule that can be used 
+to infer the group membership of future samples. An example would be using gene
+expression data to classify cancer patients according to the expected response
+to a certain course of therapy. 
+
+There are many ways to build classification rules, but the general idea is the same; 
+find patterns in the training set that are unique to each sample type and use this information
+to determine the class of new samples.
+
+Microarrays hold great promise for building classifiers because of the amount
+of information that can be generated from each array. However, this is a two
+edged sword -- much of the information cannot be distinguished from noise (low
+expressing genes), and having many more observations than samples can make the
+analysis computationally and statistically difficult. Therefore, it is usually
+desirable to pre-filter the genes down to a much smaller (100 - 200) set of genes
+before building the classifier. This itself is not a simple proposition -- ideally
+this list should contain genes that are as uncorrelated as possible, because data
+from correlated genes is in some sense redundant information.
+
+An alternative to manually subsetting the data is to use regularized regression
+models (partial least squares, ridge regression, principal components regression),
+which are designed to work with large numbers of correlated predictor
+variables. Since these methods are generally used in situations where the response
+is continuous (and in classification the response is categorical), we can use the
+optimal scoring algorithm of \citet{hastie:1994}, which extends these methods 
+to classification problems. For a more detailed description of these methods,
+please refer to \citet{ghosh:2003}.
+
+\section{A Simple Example}
+
+In this example we will use the \Rpackage{fibroEset} package, which contains
+expression data from Affymetrix HG-U95Av2 chips that were used to analyze early
+passage primary fibroblast cell lines from 18 human, 10 bonobo, and 11 gorilla 
+samples. Although the utility of a classifier based on this data set is questionable
+at best, it does provide a workable example.
+
+We first load the package:
+
+<<>>=
+library("pdmclass")
+data("fibroEset")
+fibroEset
+pData(fibroEset)
+@ 
+
+First we fit a classifier to this data, using the expression values and the
+second column of the phenoData slot. Note here that in classical statistical applications 
+the convention is for rows to contain subjects and columns to contain observations -- 
+we therefore have to transpose the expression data to meet this convention. 
+In addition, we use the usual R formula interface -- for more information, see 
+the \Rfunction{formula} help page.
+
+<<>>=
+y <- as.factor(pData(fibroEset)[,2])
+x <- t(exprs(fibroEset))
+gn.class <- pdmClass(y ~ x, method = "pls")
+@ 
+
+Once we have fit the classifier we can make a plot that shows how well the samples are 
+grouping.
+
+<<eval=FALSE>>=
+plot(gn.class, pch = levels(y))
+@ 
+
+\begin{figure}
+\centering
+<<fig=true, width=6, height=6>>=
+plot(gn.class, pch = levels(y))
+@ 
+\caption{Plot of Fitted PLS Classifier}
+\label{fig:pls}
+\end{figure}
+
+Figure~\ref{fig:pls} shows the fitted pls classifier. As would be  expected, the different 
+species are quite well separated and very tightly grouped. Samples with more subtle
+differences would not be expected to group this nicely. 
+
+Once we have built the classifier, we will most likely want to use it to predict the class
+of new samples for which we don't know the classes $a priori$. However, before we do this,
+it is prudent to test the classifier to see how accurate it is. We could simply take the data
+we used to build the classifier as if it were new data and predict the class of each sample.
+
+<<>>=
+predict(gn.class)
+@ 
+
+However, since we are predicting the class of the data that was used to build the classifier,
+we expect that the results will be much better than what could be expected with a set
+of new data.
+
+The canonical method of creating and testing a classifier is to split a set of data into
+a training and testing set. The training set is used to make the classifier and then the
+testing set is used to estimate the accuracy of the classifier by comparing the predicted
+class for each sample to the actual class. Unfortunately, it is often difficult to get 
+sufficient numbers of samples to build an accurate classifier, so it may not be possible
+to split into a training and testing set. An alternative is to perform a 'leave one out' 
+crossvalidation where we remove a single sample and then build a classifier with the remaining
+samples. We then predict the class of the sample that was removed, repeating the process
+for each sample in turn. We will then have a vector of class assignments for each sample
+that we can compare to the true class membership to create a 'confusion matrix'.
+
+<<>>=
+tst <- pdmClass.cv(y, x, method = "pls")
+confusion(tst, y)
+@ 
+
+Here we can see that we expect an error rate of approximately
+ \Sexpr{round(attr(confusion(tst, y), "error"),3)} when we apply this classifier
+to new samples.
+
+After building a classifier, we may be interested in the genes that have the most influence
+in differentiating between sample types. For this we can use the \Rfunction{pdmGenes}
+function.
+
+<<>>=
+gns <- geneNames(fibroEset)
+len <- 10
+tmp <- pdmGenes(y~x, genelist = gns, list.length = len, B=10)
+tmp
+@ 
+
+The \Rfunction{pdmGenes} function selects the top n genes (set by the argument \Rfunarg{list.length}) 
+from the original classifier, and then determines the importance of these genes by repeatedly
+taking bootstrap samples from the data and seeing what proportion of the time these genes
+are actually found to be influential in the bootstrap samples. The basic idea being that
+a truly influential gene will repeatedly show up as being influential as we make slight 
+perturbations to the data. Note that we are using \Rfunarg{contr.treatment} contrasts
+for these model fits, so one set of samples will always be set as the baseline, and the
+output will list the genes influential in the comparison of the other samples to the 
+baseline sample.
+
+
+\end{document}

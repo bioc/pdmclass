@@ -75,7 +75,7 @@ eps = .Machine$double.eps, genelist = NULL, list.length = NULL, B = 100, ...)
 \examples{
 library(fibroEset)
 data(fibroEset)
-y <- as.numeric(pData(fibroEset)[,2])
+y <- as.factor(pData(fibroEset)[,2])
 x <- t(exprs(fibroEset))
 genes <- geneNames(fibroEset)
 pdmGenes(y ~ x, genelist = genes, list.length = 25, B = 10)
