@@ -7,7 +7,13 @@
 % \VignettePackage{pdmclass}
 
 \documentclass[11pt]{article}
+
+
+\usepackage[authoryear,round]{natbib}
 \usepackage{hyperref}
+\usepackage{times}
+\usepackage{comment}
+
 \parindent 0.5in
 
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -15,6 +21,7 @@
 \newcommand{\Rpackage}[1]{{\textit{#1}}}
 \newcommand{\Rfunarg}[1]{\textit{#1}}
 
+\bibliographystyle{plainnat}
 
 
 \begin{document}
@@ -95,19 +102,19 @@ plot(gn.class, pch = levels(y))
 
 \begin{figure}
 \centering
-<<fig=true, width=6, height=6>>=
+<<fig=true, echo = FALSE, width=6, height=6>>=
 plot(gn.class, pch = levels(y))
 @ 
 \caption{Plot of Fitted PLS Classifier}
 \label{fig:pls}
 \end{figure}
 
-Figure~\ref{fig:pls} shows the fitted pls classifier. As would be  expected, the different 
+Figure~\ref{fig:pls} shows the fitted pls classifier. As would be expected, the different 
 species are quite well separated and very tightly grouped. Samples with more subtle
 differences would not be expected to group this nicely. 
 
-Once we have built the classifier, we will most likely want to use it to predict the class
-of new samples for which we don't know the classes $a priori$. However, before we do this,
+Having built the classifier, we will most likely want to use it to predict the class
+of new samples for which we don't know the classes \textit{a priori}. However, before we do this,
 it is prudent to test the classifier to see how accurate it is. We could simply take the data
 we used to build the classifier as if it were new data and predict the class of each sample.
 
@@ -115,9 +122,9 @@ we used to build the classifier as if it were new data and predict the class of 
 predict(gn.class)
 @ 
 
-However, since we are predicting the class of the data that was used to build the classifier,
-we expect that the results will be much better than what could be expected with a set
-of new data.
+Since we are predicting the class of the data that was used to build the classifier,
+we expect that these results will be much better than what could be expected with a set
+of new data. To get an unbiased estimate of the accuracy, we need a 'test set'.
 
 The canonical method of creating and testing a classifier is to split a set of data into
 a training and testing set. The training set is used to make the classifier and then the
@@ -153,12 +160,14 @@ tmp
 The \Rfunction{pdmGenes} function selects the top n genes (set by the argument \Rfunarg{list.length}) 
 from the original classifier, and then determines the importance of these genes by repeatedly
 taking bootstrap samples from the data and seeing what proportion of the time these genes
-are actually found to be influential in the bootstrap samples. The basic idea being that
-a truly influential gene will repeatedly show up as being influential as we make slight 
-perturbations to the data. Note that we are using \Rfunarg{contr.treatment} contrasts
+are actually found to be influential in fitting a classifier using the bootstrap samples. 
+The basic idea being that a truly influential gene will repeatedly show up as being influential 
+as we make slight perturbations to the data. Note that we are using \Rfunarg{contr.treatment} contrasts
 for these model fits, so one set of samples will always be set as the baseline, and the
 output will list the genes influential in the comparison of the other samples to the 
 baseline sample.
+
+\bibliography{pdmclass}
 
 
 \end{document}
