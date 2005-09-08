@@ -25,7 +25,7 @@ my.svd(x, nu = min(n, p), nv = min(n, p))
   \item{u }{A matrix whose columns contain the left singular vectors of
     \code{x}, present if 'nu > 0'.}
   \item{v}{A matrix whose columns contain the right singular vectors of
-    \cose{x}, present if 'nv > 0'.}
+    \code{x}, present if 'nv > 0'.}
 }
 \references{  http://www.sph.umich.edu/~ghoshd/COMPBIO/POPTSCORE}
 \author{Mike Denham}
