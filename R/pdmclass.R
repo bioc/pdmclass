@@ -62,7 +62,7 @@
 }
 
 "svdpls1c"<-
-  function(X, y, dimension = r)
+  function(X, y, dimension=r)
 {
   ## Copyright Mike Denham, October 1994.
   ## Comments and Complaints to: snsdenhm@reading.ac.uk
@@ -83,6 +83,7 @@
   ## rank deficiency
   ##
 
+ 
   tX <- as.matrix(X)
   r <- min(dim(X) - c(1, 0))
   X <- svd(X)
@@ -254,7 +255,7 @@ pdmClass <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   } 
   if (missing(theta)) 
     theta <- contr.helmert(J)
-  theta <- contr.fda(dp, theta)
+  theta <- mda:::contr.fda(dp, theta)
   Theta <- theta[g, , drop = FALSE]
   method <- match.arg(method)
   fit <- switch(method,
@@ -338,7 +339,7 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
     stop("A list.length and genelist must be given for the top.genes option.\n", call. = FALSE)
   if (missing(theta)) 
     theta <- contr.treatment(J)
-  theta <- contr.fda(dp, theta)
+  theta <- mda:::contr.fda(dp, theta)
   Theta <- theta[g, , drop = FALSE]
   method <- match.arg(method)
   fit <- switch(method,
@@ -358,8 +359,8 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
     counts[[k]] <- matrix(NA, nc = B, nr = list.length)
     row.names(counts[[k]]) <- genes[[k]]
   }
-  nam <- paste(levels(y)[as.numeric(dimnames(contr.treatment(J))[[2]])], "vs",
-               levels(y)[1])
+  nam <- paste(levels(fg)[as.numeric(dimnames(contr.treatment(J))[[2]])], "vs",
+               levels(fg)[1])
   names(counts) <- nam
   for(i in unique(fg)) gps[[i]] <- which(fg == unique(fg)[i])
   for(i in 1:B){
