@@ -7,13 +7,12 @@
   internal function and not intended to be called by the end user.
 }
 \usage{
-svdpls1c(X, y, dimension = r)
+svdpls1c(X, y)
 }
 \arguments{
   \item{X}{ A numeric matrix assumed to be centred so columns sum to zero.}
   \item{y}{ A numeric vector assumed to sum to zero.}
-  \item{dimension}{ The number of PLS factors in the model, which must be
-  less than or equal to the rank of \code{X}. }
+  
 }
 \value{
   An object of class \code{pls}, containing the following items:

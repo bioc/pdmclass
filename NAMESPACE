@@ -1,1 +1,1 @@
-export(pdmClass, pdmGenes, pdmClass.cv)
+export(pdmClass, pdmGenes, pdmClass.cv, predict.pls, predict.svd)

@@ -8,30 +8,15 @@
   is no need for a pre-filtering step to reduce the number of genes.
 }
 \usage{
-pdmClass(formula = formula(data), method = c("pls", "pcr", "ridge"),
-data = sys.frame(sys.parent()), weights, theta, dimension = J - 1,
-eps = .Machine$double.eps, ...)
+pdmClass(formula , method = c("pls", "pcr", "ridge"), ...)
 }
 \arguments{
    \item{formula}{A symbolic description of the model to be fit. Details
     given below. }
   \item{method}{ One of "pls", "pcr", "ridge", corresponding to partial
     least squares, principal components regression and ridge regression.}
-  \item{data}{ An optional data.frame that contains the variables in the
-    model. If not found in \code{data}, the variables are taken from
-    \code{environment(formula)}, typically the environment from which
-    \code{pdmClass} is called. Note that unlike most microarray
-    analyses, in this case rows are samples and columns are genes.}
-  \item{weights}{An optional vector of sample weights. Defaults to 1. }
-  \item{theta}{ An optional matrix of class scores, typically with less
-    than J - 1 columns.}
-  \item{dimension}{ The dimension of the solution. This will be no
-    greater than J - 1 for partial least squares and ridge regression,
-    and no greater than J for principal components regression. Defaults
-    to J - 1 and J, respectively. }
-  \item{eps}{ A threshold for excluding small discriminant
-    variables. Defaults to \code{.Machine$double.eps}.}
-  \item{\dots}{ Additional parameters to pass to \code{method}. }
+  \item{\dots}{ Additional parameters to pass to \code{method} or
+    \code{\link[mda]{fda}}. See \code{\link[mda]{fda}} for more information.}
 }
 \details{
   The formula interface is identical to all other formula calls in R,
@@ -65,6 +50,8 @@ eps = .Machine$double.eps, ...)
   \item{fit}{fit object returned by \code{method}.}
   \item{call}{the call that created this object (allowing it to be
     \code{update}-able)}
+  \item{confusion}{A 'confusion' matrix that shows how well the
+    classifier works using the training data.}
 }
 \references{ http://www.sph.umich.edu/~ghoshd/COMPBIO/POPTSCORE
 
