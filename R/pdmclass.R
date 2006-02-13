@@ -62,7 +62,7 @@
 }
 
 "svdpls1c"<-
-  function(X, y, dimension)
+  function(X, y, ...)
 {
   ## Copyright Mike Denham, October 1994.
   ## Comments and Complaints to: snsdenhm@reading.ac.uk
