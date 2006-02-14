@@ -12,7 +12,7 @@ svdpls1c(X, y, ...)
 \arguments{
   \item{X}{ A numeric matrix assumed to be centred so columns sum to zero.}
   \item{y}{ A numeric vector assumed to sum to zero.}
-  \item{\dots}{Further arguments to the function]
+  \item{\dots}{Further arguments to the function}
   
 }
 \value{
