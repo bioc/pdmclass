@@ -29,7 +29,7 @@ library(fibroEset)
 data(fibroEset)
 y <- as.numeric(pData(fibroEset)[,2])
 x <- t(exprs(fibroEset))
-genes <- geneNames(fibroEset)
+genes <- featureNames(fibroEset)
 tmp <- pdmClass(y ~ x)
 predict(tmp)
 }

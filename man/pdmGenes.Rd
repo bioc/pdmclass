@@ -77,7 +77,7 @@ library(fibroEset)
 data(fibroEset)
 y <- as.factor(pData(fibroEset)[,2])
 x <- t(exprs(fibroEset))
-genes <- geneNames(fibroEset)
+genes <- featureNames(fibroEset)
 pdmGenes(y ~ x, genelist = genes, list.length = 25, B = 10)
 }
 \keyword{ models}% at least one, from doc/KEYWORDS
