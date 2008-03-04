@@ -132,7 +132,7 @@ testing set is used to estimate the accuracy of the classifier by comparing the 
 class for each sample to the actual class. Unfortunately, it is often difficult to get 
 sufficient numbers of samples to build an accurate classifier, so it may not be possible
 to split into a training and testing set. An alternative is to perform a 'leave one out' 
-crossvalidation where we remove a single sample and then build a classifier with the remaining
+cross-validation where we remove a single sample and then build a classifier with the remaining
 samples. We then predict the class of the sample that was removed, repeating the process
 for each sample in turn. We will then have a vector of class assignments for each sample
 that we can compare to the true class membership to create a 'confusion matrix'.
@@ -151,7 +151,7 @@ in differentiating between sample types. For this we can use the \Rfunction{pdmG
 function.
 
 <<>>=
-gns <- geneNames(fibroEset)
+gns <- featureNames(fibroEset)
 len <- 10
 tmp <- pdmGenes(y~x, genelist = gns, list.length = len, B=10)
 tmp

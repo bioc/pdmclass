@@ -246,12 +246,12 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #               0)]
 #  m <- eval(m, sys.frame(sys.parent()))
 #  Terms <- attr(m, "terms")
-#  g <- model.extract(m, response)
+#  g <- model.extract(m, "response")
 #  attr(Terms, "intercept") <- 0
 #  x <- model.matrix(Terms, m)
 #  dd <- dim(x)
 #  n <- dd[1]
-#  weights <- model.extract(m, weights)
+#  weights <- model.extract(m, "weights")
 #  if (!length(weights)) 
 #    weights <- rep(1, n)
 #  else if (any(weights < 0)) 
@@ -334,12 +334,12 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
                0)]
   m <- eval(m, sys.frame(sys.parent()))
   Terms <- attr(m, "terms")
-  g <- model.extract(m, response)
+  g <- model.extract(m, "response")
   attr(Terms, "intercept") <- 0
   x <- model.matrix(Terms, m)
   dd <- dim(x)
   n <- dd[1]
-  weights <- model.extract(m, weights)
+  weights <- model.extract(m, "weights")
   if (!length(weights)) 
     weights <- rep(1, n)
   else if (any(weights < 0)) 
