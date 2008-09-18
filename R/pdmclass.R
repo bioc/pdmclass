@@ -58,7 +58,7 @@
   coef <- W %*% qr.coef(QR, y)
   fitted <- X %*% coef
   structure(list(fitted.values = fitted, coefficients = coef, dimension = dimension),
-            class="pls") 
+            class="pls")
 }
 
 "svdpls1c"<-
@@ -120,14 +120,14 @@
   coef <- NULL
   dy <- dim(y)[2]
   for (i in 1:dy) {
-    if (r == 1) 
+    if (r == 1)
       tmp <- lm.fit(as.matrix(tsvd$u[,1:r]) %*% tsvd$d[1],y[,i])
     else
       tmp <- lm.fit(as.matrix(tsvd$u[,1:r]) %*% as.matrix(diag(tsvd$d[1:r])),y[,i])
     tcoef <- as.matrix(tsvd$v[,1:r]) %*% tmp$coefficients
     coef <- cbind(coef, tcoef)
     fitted <- cbind(fitted, tX %*% tcoef)
-  }			
+  }
   structure(list(fitted.values = fitted, coefficients = coef, dimension = r,
                  xmeans = mm), class="svd")
 
@@ -138,7 +138,7 @@
   function(x, nu = min(n, p), nv = min(n, p))
 {
   ## Alternative to Singular Value Decomposition function svd
-  ## Examines matrix n by p matrix x and if n < p obtains the svd 
+  ## Examines matrix n by p matrix x and if n < p obtains the svd
   ## by applying svd the transpose of x.
   x <- as.matrix(x)
   dmx <- dim(x)
@@ -212,37 +212,37 @@
 
 predict.pls <- function(object, x, ...) {
 
-    if (missing(x)) 
+    if (missing(x))
         fitted(object)
     else scale(x, object$xmeans, FALSE) %*% object$coef
 }
 
 predict.svd <- function(object, x, ...) {
 
-    if (missing(x)) 
+    if (missing(x))
         fitted(object)
     else scale(x, object$xmeans, FALSE) %*% object$coef
 }
 
-pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
+pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), keep.fitted = TRUE, ...){
 
   method <- match.arg(method)
   obj <- switch(method,
-                pls = fda(formula, method = svdpls1c, ...),
-                pcr = fda(formula, method = svdr, ...),
-                ridge = fda(formula, method = gen.ridge, ...)
+                pls = fda(formula, method = svdpls1c, keep.fitted = keep.fitted, ...),
+                pcr = fda(formula, method = svdr, keep.fitted = keep.fitted, ...),
+                ridge = fda(formula, method = gen.ridge, keep.fitted = keep.fitted, ...)
                 )
   obj
 }
-                
+
 #pdmClass <- function (formula = formula(data), method = c("pls", "pcr", "ridge"),
 #                      data = sys.frame(sys.parent()), weights, theta,
 #                      dimension = J - 1, eps = .Machine$double.eps, ...){
-#  
+#
 #  this.call <- match.call()
 #  m <- match.call(expand = FALSE)
 #  m[[1]] <- as.name("model.frame")
-#  m <- m[match(names(m), c("", "formula", "data", "weights"), 
+#  m <- m[match(names(m), c("", "formula", "data", "weights"),
 #               0)]
 #  m <- eval(m, sys.frame(sys.parent()))
 #  Terms <- attr(m, "terms")
@@ -252,11 +252,11 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #  dd <- dim(x)
 #  n <- dd[1]
 #  weights <- model.extract(m, "weights")
-#  if (!length(weights)) 
+#  if (!length(weights))
 #    weights <- rep(1, n)
-#  else if (any(weights < 0)) 
+#  else if (any(weights < 0))
 #    stop("negative weights not allowed")
-#  if (length(g) != n) 
+#  if (length(g) != n)
 #    stop("g should have length nrow(x)")
 #  fg <- factor(g)
 #  prior <- table(fg)
@@ -265,20 +265,20 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #  g <- as.numeric(fg)
 #  J <- length(cnames)
 #  iswt <- FALSE
-#  if (missing(weights)) 
+#  if (missing(weights))
 #    dp <- table(g)/n
 #  else {
 #    weights <- (n * weights)/sum(weights)predict.pls <- function(object, x, ...) {
 #
-#    if (missing(x)) 
+#    if (missing(x))
 #        fitted(object)
 #    else scale(x, object$xmeans, FALSE) %*% object$coef
 #}
 #
  #   dp <- tapply(weights, g, sum)/n
 #    iswt <- TRUE
-#  } 
-#  if (missing(theta)) 
+#  }
+#  if (missing(theta))
  #   theta <- contr.helmert(J)
 #  theta <- mda::contr.fda(dp, theta)
 #  Theta <- theta[g, , drop = FALSE]
@@ -288,7 +288,7 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #                  scale(Theta, center = TRUE, scale = FALSE), dimension),
 #                pcr = svdr(x, Theta, dimension + 1),
 #                ridge = gen.ridge(x, Theta, weights, lambda = 1, ...))
-#  if (iswt) 
+#  if (iswt)
 #    Theta <- Theta * weights
 #  ssm <- t(Theta) %*% fitted(fit)/n
 #  ed <- svd(ssm, nu = 0)
@@ -300,7 +300,7 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #  dimension <- min(dimension, sum(lambda > eps))
 #  if (dimension == 0) {
 #    warning("degenerate problem; no discrimination")
-#    return(structure(list(dimension = 0, fit = fit, call = this.call), 
+#    return(structure(list(dimension = 0, fit = fit, call = this.call),
 #                     class = "fda"))
 #  }
 #  thetan <- thetan[, seq(dimension), drop = FALSE]
@@ -312,9 +312,9 @@ pdmClass <- function(formula,  method = c("pls", "pcr","ridge"), ...){
 #  dimnames(means) <- list(cnames, vnames)
 #  names(lambda) <- c(vnames, rep("", length(lambda) - dimension))
 #  names(pe) <- vnames
-#  obj <- structure(list(percent.explained = pe, values = lambda, 
-#                        means = means, theta.mod = thetan, dimension = dimension, 
-#                        prior = prior, fit = fit, call = this.call, terms = Terms), 
+#  obj <- structure(list(percent.explained = pe, values = lambda,
+#                        means = means, theta.mod = thetan, dimension = dimension,
+#                        prior = prior, fit = fit, call = this.call, terms = Terms),
 #                   class = "fda")
 #  obj
 #}
@@ -326,11 +326,11 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
                       dimension = J - 1, eps = .Machine$double.eps,
                       genelist = NULL, list.length = NULL,
                       B = 100, ...){
-  
+
   this.call <- match.call()
   m <- match.call(expand = FALSE)
   m[[1]] <- as.name("model.frame")
-  m <- m[match(names(m), c("", "formula", "data", "weights"), 
+  m <- m[match(names(m), c("", "formula", "data", "weights"),
                0)]
   m <- eval(m, sys.frame(sys.parent()))
   Terms <- attr(m, "terms")
@@ -340,11 +340,11 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   dd <- dim(x)
   n <- dd[1]
   weights <- model.extract(m, "weights")
-  if (!length(weights)) 
+  if (!length(weights))
     weights <- rep(1, n)
-  else if (any(weights < 0)) 
+  else if (any(weights < 0))
     stop("negative weights not allowed")
-  if (length(g) != n) 
+  if (length(g) != n)
     stop("g should have length nrow(x)")
   fg <- factor(g)
   prior <- table(fg)
@@ -353,7 +353,7 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   g <- as.numeric(fg)
   J <- length(cnames)
   iswt <- FALSE
-  if (missing(weights)) 
+  if (missing(weights))
     dp <- table(g)/n
   else {
     weights <- (n * weights)/sum(weights)
@@ -362,7 +362,7 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   }
   if(is.null(list.length) || is.null(genelist))
     stop("A list.length and genelist must be given for the top.genes option.\n", call. = FALSE)
-  if (missing(theta)) 
+  if (missing(theta))
     theta <- contr.treatment(J)
   theta <- mda:::contr.fda(dp, theta)
   Theta <- theta[g, , drop = FALSE]
@@ -415,4 +415,4 @@ pdmClass.cv <- function(Y, X, method = c("pls", "pcr", "ridge")){
   }
   out
 }
-    
+

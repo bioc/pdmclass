@@ -8,13 +8,17 @@
   is no need for a pre-filtering step to reduce the number of genes.
 }
 \usage{
-pdmClass(formula , method = c("pls", "pcr", "ridge"), ...)
+pdmClass(formula , method = c("pls", "pcr", "ridge"), keep.fitted =
+TRUE,  ...)
 }
 \arguments{
    \item{formula}{A symbolic description of the model to be fit. Details
     given below. }
   \item{method}{ One of "pls", "pcr", "ridge", corresponding to partial
-    least squares, principal components regression and ridge regression.}
+    least squares, principal components regression and ridge
+    regression.}
+  \item{keep.fitted}{Boolean. Should the fitted values be kept? Default
+    is TRUE, as this is necessary for the plotting and predict functions.}
   \item{\dots}{ Additional parameters to pass to \code{method} or
     \code{\link[mda]{fda}}. See \code{\link[mda]{fda}} for more information.}
 }
@@ -42,7 +46,7 @@ pdmClass(formula , method = c("pls", "pcr", "ridge"), ...)
   \item{means}{class means in the discriminant space.  These are also
     scaled versions of the final theta's or class scores, and can be
     used in a subsequent call to \code{fda} (this only makes sense if
-    some columns of theta are omitted---see the references).} 
+    some columns of theta are omitted---see the references).}
   \item{theta.mod}{(internal) a class scoring matrix which allows
     \code{predict} to work properly.}
   \item{dimension}{dimension of discriminant space.}
