@@ -386,7 +386,7 @@ pdmGenes <- function (formula = formula(data), method = c("pls", "pcr", "ridge")
   nam <- paste(levels(fg)[as.numeric(dimnames(contr.treatment(J))[[2]])], "vs",
                levels(fg)[1])
   names(counts) <- nam
-  for(i in unique(fg)) gps[[i]] <- which(fg == unique(fg)[i])
+  for(i in seq(along = unique(fg))) gps[[i]] <- which(fg == unique(fg)[i])
   for(i in 1:B){
     for(j in seq(along = gps)){
       samp <- sample(gps[[j]], length(gps[[j]]), TRUE)
