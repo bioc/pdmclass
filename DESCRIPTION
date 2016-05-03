@@ -1,7 +1,7 @@
 Package: pdmclass
 Type: Package
 Title: Classification of Microarray Samples using Penalized Discriminant Methods
-Version: 1.44.0
+Version: 1.45.0
 Date: 2005-07-06
 Author: James W. MacDonald, Debashis Ghosh, based in part on
 	pls code of Mike Denham
