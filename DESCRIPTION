@@ -12,3 +12,4 @@ Description: This package can be used to classify microarray data using one of t
 License: Artistic-2.0
 Depends: Biobase (>= 1.4.22), R (>= 1.9.0), fibroEset, mda
 biocViews: Classification
+PackageStatus: Deprecated

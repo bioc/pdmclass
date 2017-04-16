@@ -2,10 +2,10 @@
     msg <- c(
         "\n*** Deprecation warning ***\n",
         "The ", pkgname, " package is deprecated and will be removed from\n",
-        "Bioconductor 3.2.\n"
+        "Bioconductor 3.6.\n"
     )
     msg <- paste(msg, collapse="")
-    warning(msg)
+    .Deprecated(msg=msg)
 
     invisible(NULL)
 }
